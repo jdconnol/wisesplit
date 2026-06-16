@@ -4,8 +4,8 @@
   "display": "standalone",
   "scope": "/",
   "start_url": "/balances",
-  "name": "SplitPro",
-  "short_name": "SplitPro",
+  "name": "WiseSplit",
+  "short_name": "WiseSplit",
   "description": "Split Expenses with your friends for free",
   "icons": [
     {

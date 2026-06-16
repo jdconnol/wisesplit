@@ -8,6 +8,9 @@
   <link rel="icon" href="assets/logo.svg" />
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#10b981" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="apple-touch-icon" href="assets/icon-180.png" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -18,6 +21,7 @@
       <nav class="nav-links" id="navLinks">
         <a href="#how">How it works</a>
         <a href="#features">Features</a>
+        <a href="#screenshots">Screenshots</a>
         <a href="#download">Download</a>
         <a href="docs.html">Docs</a>
         <a href="https://github.com/oss-apps/split-pro" target="_blank" rel="noopener">GitHub</a>
@@ -31,8 +35,8 @@
         <div>
           <span class="eyebrow">Open source · Self-hosted · Agent-native</span>
           <h1>Split expenses by <span class="grad">talking to your AI</span>.</h1>
-          <p class="lead">WiseSplit is a Splitwise alternative you run yourself — and drive from any AI agent.
-            Say “I paid €40 for dinner, split with Nathen and Maverick” and it’s logged. Web, Android, and iOS.</p>
+          <p class="lead">Tell your AI agent “I paid €40 for dinner, split with Nathen and Maverick” — and it’s logged
+            instantly. WiseSplit is the open-source, self-hosted ledger that makes it work. Web, Android, and iOS.</p>
           <div class="hero-cta">
             <a class="btn btn-primary" href="#download">↓ Download &amp; install</a>
             <a class="btn btn-ghost" href="docs.html">Read the docs</a>
@@ -47,6 +51,37 @@
             <div class="bubble bot"><span class="ok">✅ Saved.</span> Nathen and Maverick each owe you €21.13.</div>
             <div class="bubble user">what does Nathen owe me now?</div>
             <div class="bubble bot">Nathen owes you <b>€86.76</b> across 4 expenses.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="why">
+      <div class="container">
+        <div class="section-head">
+          <h2>Why self-host?</h2>
+          <p>Splitwise paywalls features WiseSplit includes for free — and keeps your financial data on their servers.</p>
+        </div>
+        <div class="compare">
+          <div class="compare-col">
+            <h3>Splitwise</h3>
+            <ul>
+              <li>Receipt scanning — premium</li>
+              <li>Currency conversion — premium</li>
+              <li>Export to spreadsheet — premium</li>
+              <li>Your data lives on their servers</li>
+              <li>No API / agent access</li>
+            </ul>
+          </div>
+          <div class="compare-col highlight">
+            <h3>WiseSplit <span class="tag green">free</span></h3>
+            <ul>
+              <li>All split types included</li>
+              <li>Live FX conversion, no key needed</li>
+              <li>Export anytime — it’s your database</li>
+              <li>Self-hosted: your server, your data</li>
+              <li>8 MCP tools, full agent access</li>
+            </ul>
           </div>
         </div>
       </div>
@@ -80,6 +115,36 @@
       </div>
     </section>
 
+    <section id="screenshots" style="background:var(--bg-soft); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+      <div class="container">
+        <div class="section-head">
+          <h2>See it in action</h2>
+          <p>The full Splitwise experience — add expenses by talking to the agent, check balances, settle up — on web, Android, and iOS.</p>
+        </div>
+        <div class="demo-video">
+          <video controls playsinline preload="metadata" poster="assets/shots/demo-poster.png"
+            aria-label="WiseSplit demo: adding an expense through the AI agent and seeing balances update">
+            <source src="assets/demo.mp4" type="video/mp4" />
+            <p>Your browser doesn’t support HTML video. <a href="assets/demo.mp4">Download the demo</a>.</p>
+          </video>
+        </div>
+        <div class="shots-grid">
+          <figure class="wide">
+            <img src="assets/shots/web-app.png" alt="WiseSplit web app — balances and recent expenses dashboard" loading="lazy" />
+            <figcaption>Web app — full dashboard</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/shots/android.png" alt="WiseSplit installed as a PWA on Android, showing group balances" loading="lazy" />
+            <figcaption>Android (installed PWA)</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/shots/ios.png" alt="WiseSplit installed as a PWA on iOS, showing the add-expense screen" loading="lazy" />
+            <figcaption>iOS (installed PWA)</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
     <section id="download">
       <div class="container">
         <div class="section-head"><h2>Download &amp; install</h2><p>Install the app on your devices, then grab the agent connector. Full steps in the <a href="docs.html">docs</a>.</p></div>
@@ -98,7 +163,7 @@
               <h3>iOS <span class="tag blue">PWA</span></h3>
               <p>Open WiseSplit in Safari → Share → <b>Add to Home Screen</b>. Runs full-screen like a native app, with push.
                 (A signed <code>.ipa</code> needs your Apple Developer account — see docs.)</p>
-              <a class="btn btn-ghost" href="docs.html#ios">iOS install guide</a>
+              <a class="btn btn-primary" href="docs.html#ios">iOS install guide</a>
             </div>
           </div>
           <div class="dl">
