@@ -1,0 +1,25 @@
+# dependencies / build output
+node_modules/
+.next/
+dist/
+out/
+build/
+*.tsbuildinfo
+
+# secrets & env  (NEVER commit)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.keystore
+android/.twa-manifest.built.json
+android/app-release-signed.apk
+android/*.keystore
+
+# logs / os
+*.log
+.DS_Store
+
+# prisma local
+app/prisma/*.db

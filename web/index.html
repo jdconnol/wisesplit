@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WiseSplit — Split expenses by talking to your AI</title>
+  <meta name="description" content="WiseSplit is an open-source, self-hosted Splitwise alternative you control by talking to an AI agent. Web, Android, and iOS." />
+  <link rel="icon" href="assets/logo.svg" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" /> WiseSplit</a>
+      <button class="nav-toggle" aria-label="Menu" id="navToggle">☰</button>
+      <nav class="nav-links" id="navLinks">
+        <a href="#how">How it works</a>
+        <a href="#features">Features</a>
+        <a href="#download">Download</a>
+        <a href="docs.html">Docs</a>
+        <a href="https://github.com/oss-apps/split-pro" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">Open source · Self-hosted · Agent-native</span>
+          <h1>Split expenses by <span class="grad">talking to your AI</span>.</h1>
+          <p class="lead">WiseSplit is a Splitwise alternative you run yourself — and drive from any AI agent.
+            Say “I paid €40 for dinner, split with Nathen and Maverick” and it’s logged. Web, Android, and iOS.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="#download">↓ Download &amp; install</a>
+            <a class="btn btn-ghost" href="docs.html">Read the docs</a>
+          </div>
+        </div>
+        <div class="mock" aria-hidden="true">
+          <div class="mock-bar"><i></i><i></i><i></i></div>
+          <div class="mock-body">
+            <div class="bubble user">I paid €63.40 for dinner, split equally with Nathen and Maverick</div>
+            <div class="bubble bot"><b>Preview</b> — Dinner €63.40 (EQUAL), paid by you<br>· Nathen owes €21.13<br>· Maverick owes €21.13<br><span class="muted">Confirm to save?</span></div>
+            <div class="bubble user">yes</div>
+            <div class="bubble bot"><span class="ok">✅ Saved.</span> Nathen and Maverick each owe you €21.13.</div>
+            <div class="bubble user">what does Nathen owe me now?</div>
+            <div class="bubble bot">Nathen owes you <b>€86.76</b> across 4 expenses.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="how">
+      <div class="container">
+        <div class="section-head">
+          <h2>How it works</h2>
+          <p>WiseSplit is the data + ledger; your AI agent is the interface. The web/mobile app is always there as a visual fallback.</p>
+        </div>
+        <div class="steps">
+          <div class="step"><div class="num">1</div><h3>Run the app</h3><p>Self-host the WiseSplit server (a SplitPro fork). It’s a normal web app that installs on Android &amp; iOS as a PWA, with the full split/balance/settle ledger.</p></div>
+          <div class="step"><div class="num">2</div><h3>Connect the agent</h3><p>The MCP server exposes WiseSplit to Claude (or any MCP client) using a Personal Access Token. Reads are open; writes are previewed and idempotent.</p></div>
+          <div class="step"><div class="num">3</div><h3>Just talk</h3><p>Add expenses, settle up, check balances, search history — all in plain language. Friends use the app; you can use the agent.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" style="background:var(--bg-soft); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+      <div class="container">
+        <div class="section-head"><h2>Everything you actually use</h2><p>The whole Splitwise core, plus an agent that replaces the premium tier.</p></div>
+        <div class="features">
+          <div class="feature"><div class="ico">⚖️</div><h3>Every split type</h3><p>Equal, exact, percentage, shares, adjustment — computed precisely with no floating-point cent drift (BigInt math).</p></div>
+          <div class="feature"><div class="ico">👥</div><h3>Groups &amp; balances</h3><p>Trips, households, couples. Live who-owes-whom with debt simplification, settle-up, and an activity feed.</p></div>
+          <div class="feature"><div class="ico">🤖</div><h3>Agent-native</h3><p>8 MCP tools: add, settle, search, group management. Preview-before-write so the agent can’t mis-post.</p></div>
+          <div class="feature"><div class="ico">🔁</div><h3>Recurring &amp; multi-currency</h3><p>Rent and subscriptions auto-post; live FX conversion across currencies, no API key required.</p></div>
+          <div class="feature"><div class="ico">🔔</div><h3>Push &amp; email alerts</h3><p>Friends get notified of new expenses and settle-ups by push notification and email.</p></div>
+          <div class="feature"><div class="ico">🔒</div><h3>Yours, private</h3><p>Self-hosted. Scoped, rate-limited access tokens. No ads, no subscriptions, your data on your server.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="download">
+      <div class="container">
+        <div class="section-head"><h2>Download &amp; install</h2><p>Install the app on your devices, then grab the agent connector. Full steps in the <a href="docs.html">docs</a>.</p></div>
+        <div class="downloads">
+          <div class="dl">
+            <div class="ico">🤖</div>
+            <div>
+              <h3>Android <span class="tag green">PWA + APK</span></h3>
+              <p>Install instantly as a PWA from Chrome (“Add to Home screen”) — works today. Want a sideloadable/Play-Store APK? The repo ships a TWA project that builds a signed <code>.apk</code> in one command once your server is live.</p>
+              <a class="btn btn-primary" href="docs.html#android">Android install guide</a>
+            </div>
+          </div>
+          <div class="dl">
+            <div class="ico"></div>
+            <div>
+              <h3>iOS <span class="tag blue">PWA</span></h3>
+              <p>Open WiseSplit in Safari → Share → <b>Add to Home Screen</b>. Runs full-screen like a native app, with push.
+                (A signed <code>.ipa</code> needs your Apple Developer account — see docs.)</p>
+              <a class="btn btn-ghost" href="docs.html#ios">iOS install guide</a>
+            </div>
+          </div>
+          <div class="dl">
+            <div class="ico">🧩</div>
+            <div>
+              <h3>MCP connector <span class="tag gray">.tgz</span></h3>
+              <p>The agent connector. Install, point it at your server with a token, add to your MCP client.</p>
+              <a class="btn btn-primary" href="downloads/wisesplit-mcp.tgz" download>↓ MCP package</a>
+            </div>
+          </div>
+          <div class="dl">
+            <div class="ico">📦</div>
+            <div>
+              <h3>Full source <span class="tag gray">.zip</span></h3>
+              <p>The complete WiseSplit server + MCP connector source. Self-host and customize.</p>
+              <a class="btn btn-ghost" href="downloads/wisesplit-source.zip" download>↓ Source archive</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div><a class="brand" href="index.html" style="font-size:1rem"><img src="assets/logo.svg" alt="" style="width:24px;height:24px" /> WiseSplit</a></div>
+      <div>Open source · Built on <a href="https://github.com/oss-apps/split-pro" target="_blank" rel="noopener">SplitPro</a> (MIT) · <a href="docs.html">Docs</a></div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

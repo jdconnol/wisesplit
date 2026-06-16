@@ -1,0 +1,86 @@
+{
+  "categories_list": {
+    "entertainment": {
+      "items": {
+        "games": "Spelen",
+        "movies": "Films",
+        "music": "Muziek",
+        "other": "Entertainment",
+        "sports": "Sport"
+      },
+      "name": "Entertainment"
+    },
+    "food": {
+      "items": {
+        "diningOut": "Uit Eten",
+        "groceries": "Boodschappen",
+        "liquor": "Drank",
+        "other": "Eten & Drinken"
+      },
+      "name": "Eten & Drinken"
+    },
+    "general": {
+      "items": {
+        "general": "Algemeen",
+        "other": "Algemeen"
+      },
+      "name": "Algemeen"
+    },
+    "home": {
+      "items": {
+        "electronics": "Elektronica",
+        "furniture": "Meubels",
+        "maintenance": "Onderhoud",
+        "mortgage": "Hypotheek",
+        "other": "Huis",
+        "pets": "Huisdieren",
+        "rent": "Huur",
+        "services": "Diensten",
+        "supplies": "Voorraad"
+      },
+      "name": "Huis"
+    },
+    "life": {
+      "items": {
+        "childcare": "Kinderopvang",
+        "clothing": "Kledij",
+        "education": "Onderwijs",
+        "gifts": "Geschenken",
+        "insurance": "Verzekering",
+        "medical": "Medisch",
+        "other": "Leven",
+        "taxes": "Belastingen"
+      },
+      "name": "Leven"
+    },
+    "travel": {
+      "items": {
+        "bicycle": "Fiets",
+        "bus": "Bus",
+        "car": "Wagen",
+        "fuel": "Brandstof",
+        "hotel": "Hotel",
+        "other": "Reizen",
+        "parking": "Parking",
+        "plane": "Vliegtuig",
+        "taxi": "Taxi",
+        "train": "Trein"
+      },
+      "name": "Reizen"
+    },
+    "utilities": {
+      "items": {
+        "cleaning": "Schoonmaak",
+        "electricity": "Elektriciteit",
+        "gas": "Gas",
+        "internet": "Internet",
+        "other": "Nutsvoorzieningen",
+        "phone": "Telefoon",
+        "trash": "Afval",
+        "water": "Water"
+      },
+      "name": "Nutsvoorzieningen"
+    }
+  },
+  "title": "Categorieën"
+}

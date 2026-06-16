@@ -1,0 +1,137 @@
+import { type User } from 'next-auth';
+import nodemailer, { type Transporter } from 'nodemailer';
+
+import { env } from '~/env';
+
+import { sendToDiscord } from './service-notification';
+
+// oxlint-disable-next-line init-declarations
+let transporter: Transporter;
+
+export const mailServerConfig = {
+  host: env.EMAIL_SERVER_HOST,
+  port: parseInt(env.EMAIL_SERVER_PORT ?? ''),
+  auth: { user: env.EMAIL_SERVER_USER, pass: env.EMAIL_SERVER_PASSWORD },
+  tls: {
+    rejectUnauthorized: env.NODE_ENV !== 'development' ? env.EMAIL_TLS_REJECT_UNAUTHORIZED : false,
+  },
+};
+
+const getTransporter = () => {
+  if (transporter) {
+    return transporter;
+  }
+
+  if (!mailServerConfig.host) {
+    return;
+  }
+
+  const transport = {
+    ...mailServerConfig,
+    secure: 465 === mailServerConfig.port,
+  };
+
+  transporter = nodemailer.createTransport(transport);
+  return transporter;
+};
+
+export async function sendSignUpEmail(email: string, url: string, token: string) {
+  const { host } = new URL(url);
+
+  console.log(env.NODE_ENV);
+
+  if ('development' === env.NODE_ENV) {
+    console.log('Sign in link : ', email, url, token);
+    return true;
+  }
+
+  const subject = 'Sign in to SplitPro';
+  const text = `Hey,\n\nYou can sign in to SplitPro by clicking the below URL:\n${url}\n\nYou can also use this OTP: ${token}\n\nThanks,\nSplitPro Team`;
+  const html = `<p>Hey,</p> <p>You can sign in to SplitPro by clicking the below URL:</p><p><a href="${url}">Sign in to ${host}</a></p><p>You can also use this OTP: <b>${token}</b></p><br /><br /><p>Thanks,</p><br/>SplitPro Team</p>`;
+
+  return await sendMail(email, subject, text, html);
+}
+
+export async function sendInviteEmail(email: string, name: string) {
+  if (!env.ENABLE_SENDING_INVITES) {
+    throw new Error('Sending invites is not enabled');
+  }
+
+  const { host } = new URL(env.NEXTAUTH_URL);
+
+  if ('development' === env.NODE_ENV) {
+    console.log('Sending invite email', email, name);
+    return;
+  }
+
+  const subject = 'Invitation to SplitPro';
+  const text = `Hey,\n\nYou have been invited to SplitPro by ${name}. It's a completely open source free alternative to splitwise. You can sign in to SplitPro by clicking the below URL:\n${env.NEXTAUTH_URL}\n\nThanks,\nSplitPro Team`;
+  const html = `<p>Hey,</p> <p>You have been invited to SplitPro by ${name}. It's a completely open source free alternative to splitwise. You can sign in to SplitPro by clicking the below URL:</p><p><a href="${env.NEXTAUTH_URL}">Sign in to ${host}</a></p><br><p>Thanks,<br/>SplitPro Team</p>`;
+
+  await sendMail(email, subject, text, html);
+}
+
+export async function sendFeedbackEmail(feedback: string, user: User) {
+  console.log('Received feedback from: ', user.email, 'Feedback: ', feedback);
+
+  if (!env.FEEDBACK_EMAIL) {
+    return;
+  }
+
+  const subject = `Feedback received on SplitPro from ${user.name}`;
+  const text = `Feedback created by ${user.name} :\n\nFeedback: ${feedback}\n\nemail: ${user.email}`;
+
+  await sendMail(env.FEEDBACK_EMAIL, subject, text, text, user.email ?? undefined);
+}
+
+/**
+ * Send an expense-activity notification email (new expense / settle-up / edit / delete).
+ * Unlike the auth emails this is NOT short-circuited in development, so it actually
+ * delivers to the configured SMTP server (e.g. a local mailpit catcher).
+ */
+export async function sendExpenseNotificationEmail(
+  email: string,
+  subject: string,
+  text: string,
+  html: string,
+) {
+  return sendMail(email, subject, text, html);
+}
+
+async function sendMail(
+  email: string,
+  subject: string,
+  text: string,
+  html: string,
+  replyTo?: string,
+) {
+  const transporter = getTransporter();
+  try {
+    if (transporter) {
+      await transporter.sendMail({
+        to: email,
+        from: env.FROM_EMAIL,
+        subject,
+        text,
+        html,
+        replyTo,
+      });
+
+      console.log('Email sent');
+      return true;
+    } else {
+      console.log('SMTP server not configured, so skipping');
+    }
+  } catch (error) {
+    console.log('Error sending email', error);
+    await sendToDiscord(
+      `Error sending email: ${
+        error instanceof Error
+          ? `error.message: ${error.message}\nerror.stack: ${error.stack}`
+          : 'Unknown error'
+      }`,
+    );
+  }
+
+  return false;
+}

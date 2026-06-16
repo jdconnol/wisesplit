@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WiseSplit — Documentation</title>
+  <meta name="description" content="WiseSplit documentation: install the app, sideload on Android, install on iOS, connect the AI agent." />
+  <link rel="icon" href="assets/logo.svg" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" /> WiseSplit</a>
+      <button class="nav-toggle" aria-label="Menu" id="navToggle">☰</button>
+      <nav class="nav-links" id="navLinks">
+        <a href="index.html#how">How it works</a>
+        <a href="index.html#features">Features</a>
+        <a href="index.html#download">Download</a>
+        <a href="docs.html">Docs</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container docs-wrap">
+    <aside class="docs-side">
+      <div class="grp">Getting started</div>
+      <a href="#overview">Overview</a>
+      <a href="#prereqs">Prerequisites</a>
+      <a href="#server">Run the server</a>
+      <div class="grp">Install on devices</div>
+      <a href="#android">Android (sideload)</a>
+      <a href="#ios">iOS (Add to Home Screen)</a>
+      <div class="grp">The AI agent</div>
+      <a href="#token">Create a token</a>
+      <a href="#mcp">Connect the MCP server</a>
+      <a href="#tools">Tool reference</a>
+      <div class="grp">Help</div>
+      <a href="#troubleshooting">Troubleshooting</a>
+    </aside>
+
+    <main class="docs-content">
+      <h1>WiseSplit documentation</h1>
+      <p class="muted">WiseSplit is a self-hosted Splitwise alternative (a fork of <a href="https://github.com/oss-apps/split-pro" target="_blank" rel="noopener">SplitPro</a>) plus an MCP connector that lets an AI agent drive it.</p>
+
+      <h2 id="overview">Overview</h2>
+      <p>Two pieces:</p>
+      <ul>
+        <li><b>WiseSplit server</b> — the web/PWA app and API (Next.js + Postgres). Installs on Android &amp; iOS as a PWA.</li>
+        <li><b>MCP connector</b> — a small server that exposes WiseSplit to Claude (or any MCP client) via a Personal Access Token.</li>
+      </ul>
+      <div class="callout">Single-operator by design: one token identifies one user, and the agent acts as you. Your friends use the app normally.</div>
+
+      <h2 id="prereqs">Prerequisites</h2>
+      <ul>
+        <li>Node.js 22, pnpm 10</li>
+        <li>PostgreSQL (with <code>pg_cron</code> for recurring expenses — the prod Docker image includes it)</li>
+        <li>An SMTP server for login + email notifications (any provider, or a local catcher in dev)</li>
+      </ul>
+
+      <h2 id="server">Run the server</h2>
+      <pre><code>cd app
+cp .env.example .env        # set DATABASE_URL, NEXTAUTH_SECRET, EMAIL_SERVER_*, CURRENCY_RATE_PROVIDER=frankfurter
+pnpm install
+pnpm prisma migrate deploy
+pnpm db:seed                # optional demo data
+pnpm dev                    # http://localhost:3000</code></pre>
+      <div class="callout">After seeding demo data, resync the id sequences once:
+        <code>SELECT setval(pg_get_serial_sequence('"User"','id'), (SELECT MAX(id) FROM "User"));</code> (and the same for <code>"Group"</code>).</div>
+
+      <h2 id="android">Install on Android</h2>
+      <p>Two options:</p>
+      <ol class="muted">
+        <li><b>PWA (recommended, works today):</b> open your WiseSplit URL in Chrome → menu → <i>Install app</i> / <i>Add to Home screen</i>. Full-screen app with push notifications, no sideloading needed.</li>
+        <li><b>Sideloadable / Play-Store APK:</b> a TWA wraps your hosted PWA, so deploy WiseSplit first, then build a signed APK in one command using the included project:
+          <pre><code>DOMAIN=your.wisesplit.domain bash android/build-apk.sh</code></pre>
+          Sideload the resulting <code>app-release-signed.apk</code> (Settings → Apps → <i>Install unknown apps</i> → allow your browser/Files), or upload it to the Play Store.</li>
+      </ol>
+      <div class="callout">A TWA points at your live HTTPS instance — there is no offline APK because WiseSplit needs its backend. The PWA path needs nothing but a browser.</div>
+
+      <h2 id="ios">Install on iOS</h2>
+      <p>iOS installs WiseSplit as a Progressive Web App — full-screen, home-screen icon, push notifications:</p>
+      <ol class="muted">
+        <li>Open your WiseSplit URL in <b>Safari</b>.</li>
+        <li>Tap the <b>Share</b> button → <b>Add to Home Screen</b> → <b>Add</b>.</li>
+        <li>Launch it from your home screen like any app.</li>
+      </ol>
+      <div class="callout warn">A sideloadable signed <code>.ipa</code> requires an Apple Developer account and code-signing (via Xcode / AltStore). Apple does not allow distributing unsigned iOS binaries, so the PWA is the supported install path. The full-screen PWA is functionally equivalent for day-to-day use.</div>
+
+      <h2 id="token">Create an access token</h2>
+      <p>The agent authenticates with a Personal Access Token (only its hash is stored):</p>
+      <pre><code>cd app
+pnpm tsx --env-file=.env scripts/create-api-token.ts \
+  --email you@example.com --scope read_write --name "MCP"</code></pre>
+      <p>Use <code>--scope read</code> for a read-only token (it’s rejected on any write). Tokens are rate-limited to 60 requests/minute.</p>
+
+      <h2 id="mcp">Connect the MCP connector</h2>
+      <pre><code>cd mcp
+npm install &amp;&amp; npm run build</code></pre>
+      <p>Add to your MCP client config (e.g. Claude Code <code>.mcp.json</code>):</p>
+      <pre><code>{
+  "mcpServers": {
+    "wisesplit": {
+      "command": "node",
+      "args": ["/absolute/path/to/mcp/dist/index.js"],
+      "env": {
+        "SPLITPRO_URL": "http://localhost:3000",
+        "SPLITPRO_TOKEN": "spat_your_token_here"
+      }
+    }
+  }
+}</code></pre>
+      <p>Then talk to your agent: <i>“add €40 dinner split with Nathen and Maverick”</i>, <i>“what do I owe?”</i>, <i>“settle up €20 with Emma”</i>.</p>
+
+      <h2 id="tools">Tool reference</h2>
+      <table>
+        <tr><th>Tool</th><th>Description</th></tr>
+        <tr><td><code>list_groups</code></td><td>Your groups + your net balance in each</td></tr>
+        <tr><td><code>get_balances</code></td><td>Who owes whom (overall or one friend)</td></tr>
+        <tr><td><code>list_expenses</code></td><td>Recent expenses (all / group / friend)</td></tr>
+        <tr><td><code>search_expenses</code></td><td>Filter by text, category, date range</td></tr>
+        <tr><td><code>add_expense</code></td><td>Add an expense — preview, then confirm (idempotent)</td></tr>
+        <tr><td><code>settle_up</code></td><td>Record a payment — preview, then confirm</td></tr>
+        <tr><td><code>create_group</code></td><td>Create a group</td></tr>
+        <tr><td><code>add_member</code></td><td>Add a friend to a group</td></tr>
+      </table>
+
+      <h2 id="troubleshooting">Troubleshooting</h2>
+      <ul>
+        <li><b>401 from the agent:</b> the token is wrong/expired — re-issue one.</li>
+        <li><b>403 “read-only”:</b> you used a <code>read</code>-scope token on a write — issue a <code>read_write</code> token.</li>
+        <li><b>group.create fails with a unique id error:</b> demo seed left sequences stale — run the <code>setval</code> commands above.</li>
+        <li><b>Recurring expenses don’t fire:</b> your Postgres needs <code>pg_cron</code> (use the prod Docker image).</li>
+      </ul>
+    </main>
+  </div>
+
+  <footer>
+    <div class="container footer-inner">
+      <div><a class="brand" href="index.html" style="font-size:1rem"><img src="assets/logo.svg" alt="" style="width:24px;height:24px" /> WiseSplit</a></div>
+      <div>Open source · Built on <a href="https://github.com/oss-apps/split-pro" target="_blank" rel="noopener">SplitPro</a> (MIT)</div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

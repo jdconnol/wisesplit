@@ -1,0 +1,54 @@
+.git
+.github
+docker
+.next
+
+node_modules
+.pnp
+.pnp.js
+
+prisma/db.sqlite
+prisma/db.sqlite-journal
+prisma/seed.ts
+
+public/workbox-*.js
+public/workbox-*.js.map
+public/sw.js
+public/sw.js.map
+public/worker-*.js
+
+.gitignore
+.nvmrc
+.prettierignore
+CODE_OF_CONDUCT.md
+components.json
+CONTRIBUTING.md
+Dockerfile
+compose.yml
+.dockerignore
+LICENSE
+next-env.d.ts
+prettier.config.js
+README.md
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# local env files
+# do not commit any .env files to git, except for the .env.example file. https://create.t3.gg/en/usage/env-variables#using-environment-variables
+# .env
+.env
+.env.example
+.env*.local
+
+# typescript
+*.tsbuildinfo
+
+creds
