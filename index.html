@@ -6,13 +6,15 @@
   <title>WiseSplit — Split expenses by talking to your AI</title>
   <meta name="description" content="WiseSplit is an open-source, self-hosted Splitwise alternative you control by talking to an AI agent. Web, Android, and iOS." />
   <link rel="icon" href="assets/logo.svg" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#10b981" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="nav">
     <div class="container nav-inner">
       <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" /> WiseSplit</a>
-      <button class="nav-toggle" aria-label="Menu" id="navToggle">☰</button>
+      <button class="nav-toggle" aria-label="Menu" aria-expanded="false" id="navToggle">☰</button>
       <nav class="nav-links" id="navLinks">
         <a href="#how">How it works</a>
         <a href="#features">Features</a>
@@ -91,7 +93,7 @@
             </div>
           </div>
           <div class="dl">
-            <div class="ico"></div>
+            <div class="ico">🍎</div>
             <div>
               <h3>iOS <span class="tag blue">PWA</span></h3>
               <p>Open WiseSplit in Safari → Share → <b>Add to Home Screen</b>. Runs full-screen like a native app, with push.

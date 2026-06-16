@@ -6,38 +6,41 @@
   <title>WiseSplit — Documentation</title>
   <meta name="description" content="WiseSplit documentation: install the app, sideload on Android, install on iOS, connect the AI agent." />
   <link rel="icon" href="assets/logo.svg" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#10b981" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="nav">
     <div class="container nav-inner">
       <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" /> WiseSplit</a>
-      <button class="nav-toggle" aria-label="Menu" id="navToggle">☰</button>
+      <button class="nav-toggle" aria-label="Menu" aria-expanded="false" id="navToggle">☰</button>
       <nav class="nav-links" id="navLinks">
         <a href="index.html#how">How it works</a>
         <a href="index.html#features">Features</a>
         <a href="index.html#download">Download</a>
-        <a href="docs.html">Docs</a>
+        <a href="docs.html" aria-current="page">Docs</a>
+        <a href="https://github.com/oss-apps/split-pro" target="_blank" rel="noopener">GitHub</a>
       </nav>
     </div>
   </header>
 
   <div class="container docs-wrap">
-    <aside class="docs-side">
+    <nav class="docs-side" aria-label="Documentation sections">
       <div class="grp">Getting started</div>
       <a href="#overview">Overview</a>
       <a href="#prereqs">Prerequisites</a>
       <a href="#server">Run the server</a>
       <div class="grp">Install on devices</div>
-      <a href="#android">Android (sideload)</a>
-      <a href="#ios">iOS (Add to Home Screen)</a>
+      <a href="#android">Android</a>
+      <a href="#ios">iOS</a>
       <div class="grp">The AI agent</div>
       <a href="#token">Create a token</a>
       <a href="#mcp">Connect the MCP server</a>
       <a href="#tools">Tool reference</a>
       <div class="grp">Help</div>
       <a href="#troubleshooting">Troubleshooting</a>
-    </aside>
+    </nav>
 
     <main class="docs-content">
       <h1>WiseSplit documentation</h1>
@@ -70,7 +73,7 @@ pnpm dev                    # http://localhost:3000</code></pre>
 
       <h2 id="android">Install on Android</h2>
       <p>Two options:</p>
-      <ol class="muted">
+      <ol>
         <li><b>PWA (recommended, works today):</b> open your WiseSplit URL in Chrome → menu → <i>Install app</i> / <i>Add to Home screen</i>. Full-screen app with push notifications, no sideloading needed.</li>
         <li><b>Sideloadable / Play-Store APK:</b> a TWA wraps your hosted PWA, so deploy WiseSplit first, then build a signed APK in one command using the included project:
           <pre><code>DOMAIN=your.wisesplit.domain bash android/build-apk.sh</code></pre>
@@ -80,7 +83,7 @@ pnpm dev                    # http://localhost:3000</code></pre>
 
       <h2 id="ios">Install on iOS</h2>
       <p>iOS installs WiseSplit as a Progressive Web App — full-screen, home-screen icon, push notifications:</p>
-      <ol class="muted">
+      <ol>
         <li>Open your WiseSplit URL in <b>Safari</b>.</li>
         <li>Tap the <b>Share</b> button → <b>Add to Home Screen</b> → <b>Add</b>.</li>
         <li>Launch it from your home screen like any app.</li>

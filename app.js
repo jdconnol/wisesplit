@@ -3,7 +3,16 @@
   var toggle = document.getElementById('navToggle');
   var links = document.getElementById('navLinks');
   if (toggle && links) {
-    toggle.addEventListener('click', function () { links.classList.toggle('open'); });
+    var setOpen = function (open) {
+      links.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    };
+    toggle.addEventListener('click', function () { setOpen(!links.classList.contains('open')); });
+    // Close the mobile menu after tapping a link or pressing Escape.
+    links.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () { setOpen(false); });
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
   }
 
   // Add copy buttons to code blocks.
