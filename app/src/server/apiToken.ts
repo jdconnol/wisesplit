@@ -34,6 +34,14 @@ function withinRateLimit(key: string): boolean {
   const now = Date.now();
   const bucket = buckets.get(key);
   if (!bucket || now > bucket.resetAt) {
+    // Opportunistically prune expired buckets so the map can't grow unbounded.
+    if (buckets.size > 1000) {
+      for (const [k, b] of buckets) {
+        if (now > b.resetAt) {
+          buckets.delete(k);
+        }
+      }
+    }
     buckets.set(key, { count: 1, resetAt: now + WINDOW_MS });
     return true;
   }

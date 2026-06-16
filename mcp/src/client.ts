@@ -89,6 +89,7 @@ export class SplitProClient {
     }
 
     const result = (entry?.result ?? {}) as Record<string, unknown>;
-    return superjson.deserialize(result.data as never) as T;
+    // Void mutations return no `data`; deserializing undefined would throw.
+    return (result.data !== undefined ? superjson.deserialize(result.data as never) : undefined) as T;
   }
 }

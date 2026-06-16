@@ -169,8 +169,10 @@ export async function createExpense(
     sendExpenseEmailNotification(createdExpense.id).catch(console.error);
     return createdExpense;
   } catch (error) {
-    // If we created a cron job but transaction failed, clean up the cron job
-    if (expenseId) {
+    // If we created a cron job but the transaction failed, clean it up.
+    // Guard on jobId (not expenseId): idempotent non-recurring creates also set
+    // expenseId but never create a cron job, and unschedule() would throw.
+    if (jobId) {
       await db.$executeRaw`SELECT cron.unschedule(${`expense_recurring_${expenseId}`})`;
     }
     // Concurrent retry that lost the unique-constraint race: return the winner's expense.

@@ -350,7 +350,7 @@ export const expenseRouter = createTRPCRouter({
 
   getExpenseDetails: protectedProcedure
     .input(z.object({ expenseId: z.string() }))
-    .query(async ({ input }) => {
+    .query(async ({ input, ctx }) => {
       const expense = await db.expense.findUnique({
         where: {
           id: input.expenseId,
@@ -388,6 +388,23 @@ export const expenseRouter = createTRPCRouter({
           },
         },
       });
+
+      // Ownership check: allow a participant, the creator, or (for group expenses)
+      // any member of that group. Anyone else gets NOT_FOUND (no existence leak).
+      if (expense) {
+        const uid = ctx.session.user.id;
+        let allowed =
+          expense.addedBy === uid || expense.expenseParticipants.some((ep) => ep.userId === uid);
+        if (!allowed && expense.groupId !== null) {
+          const membership = await db.groupUser.findFirst({
+            where: { groupId: expense.groupId, userId: uid },
+          });
+          allowed = Boolean(membership);
+        }
+        if (!allowed) {
+          throw new TRPCError({ code: 'NOT_FOUND', message: 'Expense not found' });
+        }
+      }
 
       if (expense && expense.groupId !== null) {
         const missingGroupMembers = await db.group.findUnique({
@@ -639,7 +656,7 @@ const validateEditExpensePermission = async (expenseId: string, userId: number):
     db.expense.findUnique({ where: { id: expenseId }, select: { addedBy: true } }),
   ]);
 
-  if (!expenseParticipant && !addedBy?.addedBy) {
+  if (!expenseParticipant && addedBy?.addedBy !== userId) {
     throw new TRPCError({
       code: 'UNAUTHORIZED',
       message: 'You are not the participant of the expense',

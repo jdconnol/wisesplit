@@ -275,9 +275,12 @@ export async function sendExpenseEmailNotification(expenseId: string) {
   }
 
   const url = `${env.NEXTAUTH_URL}/expenses/${expenseId}`;
+  // Escape user-controlled strings (expense name, user name/email) before HTML interpolation.
+  const esc = (s: string) =>
+    s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   const subject = `[SplitPro] ${message}`;
   const text = `${title}: ${message}\n\nView it in SplitPro: ${url}`;
-  const html = `<p><b>${title}</b></p><p>${message}</p><p><a href="${url}">View in SplitPro</a></p>`;
+  const html = `<p><b>${esc(title)}</b></p><p>${esc(message)}</p><p><a href="${esc(url)}">View in SplitPro</a></p>`;
 
   await Promise.all(
     recipients.map((r) => sendExpenseNotificationEmail(r.user!.email!, subject, text, html)),

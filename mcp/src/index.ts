@@ -19,6 +19,15 @@ if (!token) {
   process.exit(1);
 }
 
+// Refuse to send the bearer token over plaintext HTTP to a non-local host.
+const isLocalHost = /^https?:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/.test(baseUrl);
+if (!baseUrl.startsWith('https://') && !isLocalHost) {
+  console.error(
+    `FATAL: refusing to send the token over plain HTTP to a non-local host (${baseUrl}). Use https:// for SPLITPRO_URL.`,
+  );
+  process.exit(1);
+}
+
 const api = new SplitProApi(baseUrl, token);
 const server = new McpServer({ name: 'splitpro-mcp', version: '0.1.0' });
 
