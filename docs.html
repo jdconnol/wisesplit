@@ -8,6 +8,9 @@
   <link rel="icon" href="assets/logo.svg" />
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#10b981" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="apple-touch-icon" href="assets/icon-180.png" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -54,6 +57,11 @@
       </ul>
       <div class="callout">Single-operator by design: one token identifies one user, and the agent acts as you. Your friends use the app normally.</div>
 
+      <figure class="doc-screenshot">
+        <img src="assets/shots/web-app.png" alt="WiseSplit expense dashboard showing balances and recent expenses" loading="lazy" />
+        <figcaption>The web app — what your friends see. You can drive the same data through the AI agent.</figcaption>
+      </figure>
+
       <h2 id="prereqs">Prerequisites</h2>
       <ul>
         <li>Node.js 22, pnpm 10</li>
@@ -81,6 +89,11 @@ pnpm dev                    # http://localhost:3000</code></pre>
       </ol>
       <div class="callout">A TWA points at your live HTTPS instance — there is no offline APK because WiseSplit needs its backend. The PWA path needs nothing but a browser.</div>
 
+      <figure class="doc-screenshot">
+        <img src="assets/shots/android.png" alt="WiseSplit running as an installed PWA on Android, showing the Groups list" loading="lazy" />
+        <figcaption>WiseSplit on Android — installed PWA, full-screen with a native tab bar.</figcaption>
+      </figure>
+
       <h2 id="ios">Install on iOS</h2>
       <p>iOS installs WiseSplit as a Progressive Web App — full-screen, home-screen icon, push notifications:</p>
       <ol>
@@ -89,6 +102,11 @@ pnpm dev                    # http://localhost:3000</code></pre>
         <li>Launch it from your home screen like any app.</li>
       </ol>
       <div class="callout warn">A sideloadable signed <code>.ipa</code> requires an Apple Developer account and code-signing (via Xcode / AltStore). Apple does not allow distributing unsigned iOS binaries, so the PWA is the supported install path. The full-screen PWA is functionally equivalent for day-to-day use.</div>
+
+      <figure class="doc-screenshot">
+        <img src="assets/shots/ios.png" alt="WiseSplit running as an installed PWA on iOS, showing the Add Expense screen" loading="lazy" />
+        <figcaption>WiseSplit on iOS — installed PWA, adding an expense.</figcaption>
+      </figure>
 
       <h2 id="token">Create an access token</h2>
       <p>The agent authenticates with a Personal Access Token (only its hash is stored):</p>
@@ -116,8 +134,11 @@ npm install &amp;&amp; npm run build</code></pre>
       <p>Then talk to your agent: <i>“add €40 dinner split with Nathen and Maverick”</i>, <i>“what do I owe?”</i>, <i>“settle up €20 with Emma”</i>.</p>
 
       <h2 id="tools">Tool reference</h2>
-      <table>
-        <tr><th>Tool</th><th>Description</th></tr>
+      <table aria-label="MCP tool reference">
+        <thead>
+          <tr><th scope="col">Tool</th><th scope="col">Description</th></tr>
+        </thead>
+        <tbody>
         <tr><td><code>list_groups</code></td><td>Your groups + your net balance in each</td></tr>
         <tr><td><code>get_balances</code></td><td>Who owes whom (overall or one friend)</td></tr>
         <tr><td><code>list_expenses</code></td><td>Recent expenses (all / group / friend)</td></tr>
@@ -126,6 +147,7 @@ npm install &amp;&amp; npm run build</code></pre>
         <tr><td><code>settle_up</code></td><td>Record a payment — preview, then confirm</td></tr>
         <tr><td><code>create_group</code></td><td>Create a group</td></tr>
         <tr><td><code>add_member</code></td><td>Add a friend to a group</td></tr>
+        </tbody>
       </table>
 
       <h2 id="troubleshooting">Troubleshooting</h2>
@@ -141,7 +163,7 @@ npm install &amp;&amp; npm run build</code></pre>
   <footer>
     <div class="container footer-inner">
       <div><a class="brand" href="index.html" style="font-size:1rem"><img src="assets/logo.svg" alt="" style="width:24px;height:24px" /> WiseSplit</a></div>
-      <div>Open source · Built on <a href="https://github.com/oss-apps/split-pro" target="_blank" rel="noopener">SplitPro</a> (MIT)</div>
+      <div>Open source · Built on <a href="https://github.com/oss-apps/split-pro" target="_blank" rel="noopener">SplitPro</a> (MIT) · <a href="index.html">Home</a> · <a href="index.html#download">Download</a></div>
     </div>
   </footer>
 

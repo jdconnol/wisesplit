@@ -29,6 +29,8 @@
       });
     });
     pre.appendChild(btn);
+    pre.setAttribute('role', 'region');
+    pre.setAttribute('aria-label', 'Code block');
   });
 
   // Highlight active section in docs sidebar.
